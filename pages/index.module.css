@@ -136,3 +136,18 @@
     color: #ffffff;
     margin-bottom: 100px;
 }
+
+.wrapper .loadingWrap {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.wrapper .columns {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    gap: 17px;
+    z-index: 3;
+}

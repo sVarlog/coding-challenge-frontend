@@ -1,39 +1,30 @@
 import TargetComponent from "@/components/target/TargetComponent";
 import styles from "./index.module.css";
 import { values, targets } from "./temp";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getFormattedString, getNumberFromString } from "utils/formatting";
+import OrdersListComponent from "@/components/orders/OrdersListComponent";
+
+const ordersCount = 5;
 
 const Home = () => {
     const [currentDate, setCurrentDate] = useState(new Date());
     const [isLoading, setLoading] = useState(true);
+    const [ordersSum, setOrdersSum] = useState(0);
+    const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);
 
     const getMonthName = (date: Date) => {
         return date.toLocaleDateString("en-US", { month: "long" });
     };
 
-    const getNumber = (str: string | undefined) => {
-        console.log(str);
-        console.log(currentDate);
-        console.log(targets);
-
-        if (!str) return 0;
-
-        return Number(
-            str
-                .replace(/[^\d,.-]/g, "")
-                .replace(/\./g, "")
-                .replace(",", ".")
-        );
-    };
-
-    const monthTarget = getNumber(
+    const monthTarget = getNumberFromString(
         targets.find((el) => el.includes(getMonthName(currentDate)))?.[1]
     );
 
     const maxTarget = Math.max(
         ...JSON.parse(JSON.stringify(targets))
             .splice(1)
-            .map((el: string[]) => getNumber(el[1]))
+            .map((el: string[]) => getNumberFromString(el[1]))
     );
 
     console.log(monthTarget);
@@ -56,9 +47,58 @@ const Home = () => {
         }
     };
 
+    console.log(filteredOrders);
+
+    type Order = [string, string, string, string];
+
+    useEffect(() => {
+        const dateFilter = currentDate
+            .toLocaleString("default", {
+                month: "2-digit",
+                year: "numeric",
+            })
+            .split(".")
+            .reverse()
+            .join("/");
+
+        const [header, volume, ...data] = values;
+        const dateIndex = header.indexOf("Order date");
+        const volumeIndex = header.indexOf("Order volume");
+
+        if (dateIndex === -1 || volumeIndex === -1) {
+            console.error(
+                "Could not find 'Order date' or 'Order volume' in header row"
+            );
+            return;
+        }
+
+        const currentProducts = data.filter((order) => {
+            const orderDate = new Date(
+                order[dateIndex].split(".").reverse().join("/")
+            );
+            const orderDateFilter = orderDate
+                .toLocaleString("default", {
+                    month: "2-digit",
+                    year: "numeric",
+                })
+                .split(".")
+                .reverse()
+                .join("/");
+            return orderDateFilter === dateFilter;
+        });
+
+        const orderVolume = currentProducts
+            .map((row) => row[volumeIndex])
+            .reduce((acc, curr) => acc + getNumberFromString(curr), 0);
+
+        setOrdersSum(orderVolume || 0);
+
+        setFilteredOrders(currentProducts as Order[]);
+    }, [currentDate]);
+
     setTimeout(() => {
         setLoading(false);
-    }, 100);
+    }, 250);
 
     return (
         <div className={styles.wrapper}>
@@ -81,7 +121,7 @@ const Home = () => {
 
                             <div className={styles.switcherBtns}>
                                 <button
-                                    onClick={() => changeCurrentMonth("prev")}
+                                    onClick={() => changeCurrentMonth("next")}
                                 >
                                     {/* prettier-ignore */}
                                     <svg width="33" height="33" viewBox="0 0 33 33" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -97,7 +137,7 @@ const Home = () => {
                                 </button>
 
                                 <button
-                                    onClick={() => changeCurrentMonth("next")}
+                                    onClick={() => changeCurrentMonth("prev")}
                                 >
                                     {/* prettier-ignore */}
                                     <svg width="33" height="33" viewBox="0 0 33 33" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -123,19 +163,35 @@ const Home = () => {
                 </div>
 
                 {isLoading ? (
-                    <p>Loading</p>
+                    <div className={styles.loadingWrap}>
+                        <img src="/WhiteLoader.svg" />
+                    </div>
                 ) : (
                     <>
-                        <h1>5.237,27 €</h1>
+                        <h1>{getFormattedString(ordersSum)}</h1>
 
                         <TargetComponent
                             target={monthTarget}
                             maxTarget={maxTarget}
-                            result={90000}
+                            result={ordersSum}
                         />
                     </>
                 )}
             </div>
+
+            {!isLoading && (
+                <div className={styles.columns}>
+                    <OrdersListComponent
+                        type={"recent"}
+                        ordersCount={ordersCount}
+                    />
+
+                    <OrdersListComponent
+                        type={"top"}
+                        ordersCount={ordersCount}
+                    />
+                </div>
+            )}
         </div>
     );
 };

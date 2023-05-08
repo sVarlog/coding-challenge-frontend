@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./target.module.css";
+import { getFormattedString } from "utils/formatting";
 
 interface TargetComponentProps {
     target: number;
@@ -31,13 +32,6 @@ const TargetComponent: React.FC<TargetComponentProps> = ({
         if (!targetWrapRef?.current) return {};
 
         return { width: `${(result / target) * 100}%`, opacity: 100 };
-    };
-
-    const getFormattedString = (num: number) => {
-        return new Intl.NumberFormat("de-DE", {
-            style: "currency",
-            currency: "EUR",
-        }).format(num);
     };
 
     useEffect(() => {
