@@ -1,3 +1,4 @@
+import React from "react";
 import styles from "./ordersList.module.css";
 
 interface OrdersListProps {
