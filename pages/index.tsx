@@ -1,65 +1,143 @@
-import Head from 'next/head'
-import Image from 'next/image'
+import TargetComponent from "@/components/target/TargetComponent";
+import styles from "./index.module.css";
+import { values, targets } from "./temp";
+import { useState } from "react";
 
-import styles from '@/pages/index.module.css'
+const Home = () => {
+    const [currentDate, setCurrentDate] = useState(new Date());
+    const [isLoading, setLoading] = useState(true);
 
-export default function Home() {
-  return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    const getMonthName = (date: Date) => {
+        return date.toLocaleDateString("en-US", { month: "long" });
+    };
 
-      <main>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+    const getNumber = (str: string | undefined) => {
+        console.log(str);
+        console.log(currentDate);
+        console.log(targets);
 
-        <p className={styles.description}>
-          Get started by editing <code>pages/index.js</code>
-        </p>
+        if (!str) return 0;
 
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
+        return Number(
+            str
+                .replace(/[^\d,.-]/g, "")
+                .replace(/\./g, "")
+                .replace(",", ".")
+        );
+    };
 
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
+    const monthTarget = getNumber(
+        targets.find((el) => el.includes(getMonthName(currentDate)))?.[1]
+    );
 
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
+    const maxTarget = Math.max(
+        ...JSON.parse(JSON.stringify(targets))
+            .splice(1)
+            .map((el: string[]) => getNumber(el[1]))
+    );
 
-          <a href="https://vercel.com/new" className={styles.card}>
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
+    console.log(monthTarget);
+
+    const changeCurrentMonth = (dir: "next" | "prev") => {
+        if (!dir || (dir !== "next" && dir !== "prev")) return;
+
+        if (dir === "next") {
+            const newDate = new Date(currentDate);
+
+            newDate.setMonth(newDate.getMonth() - 1);
+
+            setCurrentDate(newDate);
+        } else {
+            const newDate = new Date(currentDate);
+
+            newDate.setMonth(newDate.getMonth() + 1);
+
+            setCurrentDate(newDate);
+        }
+    };
+
+    setTimeout(() => {
+        setLoading(false);
+    }, 100);
+
+    return (
+        <div className={styles.wrapper}>
+            <div className={styles.bg}>
+                <div className={styles.circleOne}></div>
+                <div className={styles.circleSec}></div>
+                <div className={styles.circleThr}></div>
+            </div>
+
+            <div className={styles.container}>
+                <div className={styles.head}>
+                    <div className="left">
+                        <p>Order Dashboard</p>
+
+                        <div className={styles.switcher}>
+                            <h2>
+                                {getMonthName(currentDate)}{" "}
+                                {currentDate.getFullYear()}
+                            </h2>
+
+                            <div className={styles.switcherBtns}>
+                                <button
+                                    onClick={() => changeCurrentMonth("prev")}
+                                >
+                                    {/* prettier-ignore */}
+                                    <svg width="33" height="33" viewBox="0 0 33 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<g clip-path="url(#clip0_3_161)">
+										<path d="M21.4638 10.1887L19.525 8.25L11.275 16.5L19.525 24.75L21.4638 22.8113L15.1663 16.5L21.4638 10.1887Z" fill="#C4C4C4"/>
+									</g>
+									<defs>
+										<clipPath id="clip0_3_161">
+											<rect width="33" height="33" fill="white"/>
+										</clipPath>
+									</defs>
+								</svg>
+                                </button>
+
+                                <button
+                                    onClick={() => changeCurrentMonth("next")}
+                                >
+                                    {/* prettier-ignore */}
+                                    <svg width="33" height="33" viewBox="0 0 33 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<g clip-path="url(#clip0_3_166)">
+										<path d="M11.5362 22.8113L13.475 24.75L21.725 16.5L13.475 8.25L11.5362 10.1887L17.8337 16.5L11.5362 22.8113Z" fill="#C4C4C4"/>
+									</g>
+									<defs>
+										<clipPath id="clip0_3_166">
+											<rect width="33" height="33" fill="white" transform="matrix(-1 0 0 -1 33 33)"/>
+										</clipPath>
+									</defs>
+								</svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="right">
+                        <p className={styles.countdown}>
+                            Refresh in <span>10</span>
+                        </p>
+                    </div>
+                </div>
+
+                {isLoading ? (
+                    <p>Loading</p>
+                ) : (
+                    <>
+                        <h1>5.237,27 €</h1>
+
+                        <TargetComponent
+                            target={monthTarget}
+                            maxTarget={maxTarget}
+                            result={90000}
+                        />
+                    </>
+                )}
+            </div>
         </div>
-      </main>
+    );
+};
 
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <span className={styles.logo}>
-            <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-          </span>
-        </a>
-      </footer>
-    </div>
-  )
-}
+export default Home;
