@@ -5,6 +5,8 @@ import { values, targets } from "../tempData";
 import { useEffect, useState } from "react";
 import { getFormattedString, getNumberFromString } from "utils/formatting";
 import OrdersListComponent from "@/components/orders/OrdersListComponent";
+import { Order } from "utils/types";
+import { Product } from "utils/interfaces";
 
 const ordersCount = 5;
 
@@ -13,6 +15,7 @@ const Home = () => {
     const [isLoading, setLoading] = useState(true);
     const [ordersSum, setOrdersSum] = useState(0);
     const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);
+    const [popularProducts, setPopularProducts] = useState<Product[]>([]);
 
     const getMonthName = (date: Date) => {
         return date.toLocaleDateString("en-US", { month: "long" });
@@ -48,10 +51,6 @@ const Home = () => {
         }
     };
 
-    console.log(filteredOrders);
-
-    type Order = [string, string, string, string];
-
     useEffect(() => {
         const dateFilter = currentDate
             .toLocaleString("default", {
@@ -65,36 +64,62 @@ const Home = () => {
         const [header, ...data] = values;
         const dateIndex = header.indexOf("Order date");
         const volumeIndex = header.indexOf("Order volume");
+        const productIndex = header.indexOf("Product");
 
-        if (dateIndex === -1 || volumeIndex === -1) {
+        if (dateIndex === -1 || volumeIndex === -1 || productIndex === -1) {
             console.error(
-                "Could not find 'Order date' or 'Order volume' in header row"
+                "Could not find 'Order date', 'Order volume', or 'Product' in header row"
             );
             return;
         }
 
-        const currentProducts = data.filter((order) => {
-            const orderDate = new Date(
-                order[dateIndex].split(".").reverse().join("/")
-            );
-            const orderDateFilter = orderDate
-                .toLocaleString("default", {
-                    month: "2-digit",
-                    year: "numeric",
-                })
-                .split(".")
-                .reverse()
-                .join("/");
-            return orderDateFilter === dateFilter;
-        });
+        const orders: Order[] = data
+            .sort(
+                (a: Order, b: Order) =>
+                    new Date(b[dateIndex]).getTime() -
+                    new Date(a[dateIndex]).getTime()
+            )
+            .filter((order: Order) => {
+                const orderDate = new Date(
+                    order[dateIndex].split(".").reverse().join("/")
+                );
+                const orderDateFilter = orderDate
+                    .toLocaleString("default", {
+                        month: "2-digit",
+                        year: "numeric",
+                    })
+                    .split(".")
+                    .reverse()
+                    .join("/");
+                return orderDateFilter === dateFilter;
+            });
 
-        const orderVolume = currentProducts
+        setFilteredOrders(orders as Order[]);
+
+        const orderVolume = orders
             .map((row) => row[volumeIndex])
             .reduce((acc, curr) => acc + getNumberFromString(curr), 0);
 
         setOrdersSum(orderVolume || 0);
 
-        setFilteredOrders(currentProducts as Order[]);
+        const uniqueProducts = Array.from(
+            new Set(orders.map((row) => row[productIndex]))
+        );
+
+        const popularProducts = uniqueProducts.map((product) => {
+            const productOrders = orders.filter(
+                (row) => row[productIndex] === product
+            );
+            const volume = productOrders
+                .map((row) => row[volumeIndex])
+                .reduce((acc, curr) => acc + getNumberFromString(curr), 0);
+            return {
+                name: product,
+                volume: volume,
+            };
+        });
+
+        setPopularProducts(popularProducts.sort((a, b) => b.volume - a.volume));
     }, [currentDate]);
 
     setTimeout(() => {
@@ -185,11 +210,13 @@ const Home = () => {
                     <OrdersListComponent
                         type={"recent"}
                         ordersCount={ordersCount}
+                        orders={filteredOrders}
                     />
 
                     <OrdersListComponent
                         type={"top"}
                         ordersCount={ordersCount}
+                        products={popularProducts}
                     />
                 </div>
             )}
