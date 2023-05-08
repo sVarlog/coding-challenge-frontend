@@ -1,0 +1,25 @@
+.column {
+    background: #26262c;
+    padding: 27px 23px;
+}
+
+.column.left {
+    width: 40%;
+}
+
+.column.right {
+    width: 60%;
+}
+
+.column .title {
+    font-family: "Source Serif Pro";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 25px;
+    text-transform: uppercase;
+    color: #fafafa;
+    width: 100%;
+    border-bottom: 2px solid #c4c4c4;
+    padding-bottom: 3px;
+}
