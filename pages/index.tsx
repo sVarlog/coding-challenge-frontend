@@ -1,6 +1,7 @@
+import React from "react";
 import TargetComponent from "@/components/target/TargetComponent";
 import styles from "./index.module.css";
-import { values, targets } from "./temp";
+import { values, targets } from "../tempData";
 import { useEffect, useState } from "react";
 import { getFormattedString, getNumberFromString } from "utils/formatting";
 import OrdersListComponent from "@/components/orders/OrdersListComponent";
@@ -61,7 +62,7 @@ const Home = () => {
             .reverse()
             .join("/");
 
-        const [header, volume, ...data] = values;
+        const [header, ...data] = values;
         const dateIndex = header.indexOf("Order date");
         const volumeIndex = header.indexOf("Order volume");
 
@@ -125,7 +126,7 @@ const Home = () => {
                                 >
                                     {/* prettier-ignore */}
                                     <svg width="33" height="33" viewBox="0 0 33 33" fill="none" xmlns="http://www.w3.org/2000/svg">
-									<g clip-path="url(#clip0_3_161)">
+									<g clipPath="url(#clip0_3_161)">
 										<path d="M21.4638 10.1887L19.525 8.25L11.275 16.5L19.525 24.75L21.4638 22.8113L15.1663 16.5L21.4638 10.1887Z" fill="#C4C4C4"/>
 									</g>
 									<defs>
@@ -141,7 +142,7 @@ const Home = () => {
                                 >
                                     {/* prettier-ignore */}
                                     <svg width="33" height="33" viewBox="0 0 33 33" fill="none" xmlns="http://www.w3.org/2000/svg">
-									<g clip-path="url(#clip0_3_166)">
+									<g clipPath="url(#clip0_3_166)">
 										<path d="M11.5362 22.8113L13.475 24.75L21.725 16.5L13.475 8.25L11.5362 10.1887L17.8337 16.5L11.5362 22.8113Z" fill="#C4C4C4"/>
 									</g>
 									<defs>
