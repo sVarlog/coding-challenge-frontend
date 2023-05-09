@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect, useRef, useState } from "react";
 import styles from "./target.module.css";
-import { getFormattedString } from "utils/formatting";
+import { getFormattedString } from "../../utils/formatting";
 
 interface TargetComponentProps {
     target: number;

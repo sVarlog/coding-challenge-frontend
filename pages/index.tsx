@@ -8,13 +8,11 @@ import {
     getNumberFromString,
 } from "utils/formatting";
 import OrdersListComponent from "@/components/orders/OrdersListComponent";
-import { Order, Product, Target } from "utils/interfaces";
+import { Order, Product, Target } from "../utils/interfaces";
 import HeaderComponent from "@/components/header/HeaderComponent";
-import { getOrders, getTargets } from "api/sheets";
+import { getOrders, getTargets } from "../api/sheets";
 
-const ordersCount = 5;
-
-const Home: React.FC = () => {
+const Home = () => {
     const [currentDate, setCurrentDate] = useState(new Date());
     const [isLoading, setLoading] = useState(true);
     const [ordersSum, setOrdersSum] = useState(0);
@@ -22,6 +20,7 @@ const Home: React.FC = () => {
     const [popularProducts, setPopularProducts] = useState<Product[]>([]);
     const [values, setValues] = useState<Order[]>([]);
     const [targets, setTargets] = useState<Target[]>([]);
+    const ordersCount = 5;
 
     const monthTarget = getNumberFromString(
         targets.find((el) => el["Month"] === getMonthName(currentDate))?.Target
@@ -72,7 +71,7 @@ const Home: React.FC = () => {
         if (!values.length) return;
 
         const dateFilter = currentDate
-            .toLocaleString("default", {
+            .toLocaleString("en-EN", {
                 month: "2-digit",
                 year: "numeric",
             })
@@ -84,7 +83,7 @@ const Home: React.FC = () => {
             .filter((order: Order) => {
                 const [day, month, year] = order["Order date"].split(".");
                 const orderDate = new Date(`${year}-${month}-${day}`);
-                const orderDateFilter = orderDate.toLocaleString("default", {
+                const orderDateFilter = orderDate.toLocaleString("en-EN", {
                     month: "2-digit",
                     year: "numeric",
                 });
