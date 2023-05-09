@@ -16,4 +16,8 @@ const getNumberFromString = (str: string | undefined) => {
     );
 };
 
-export { getFormattedString, getNumberFromString };
+const getMonthName = (date: Date) => {
+    return date.toLocaleDateString("en-US", { month: "long" });
+};
+
+export { getFormattedString, getNumberFromString, getMonthName };

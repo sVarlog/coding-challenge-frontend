@@ -1,14 +1,23 @@
 import React from "react";
 import styles from "./ordersList.module.css";
+import { Product } from "utils/interfaces";
+import OrderItem from "./OrderItem";
+import ProductItem from "./ProductItem";
 
 interface OrdersListProps {
     type: "recent" | "top";
     ordersCount: number;
+    totalSum: number;
+    orders?: string[];
+    products?: Product[];
 }
 
 const OrdersListComponent: React.FC<OrdersListProps> = ({
     type,
     ordersCount,
+    orders,
+    products,
+    totalSum,
 }) => {
     const getColumnTitle = () => {
         if (type === "recent") {
@@ -20,6 +29,28 @@ const OrdersListComponent: React.FC<OrdersListProps> = ({
         return "";
     };
 
+    const getEmptyDesc = () => {
+        if (type === "recent") {
+            return `No orders yet`;
+        } else if (type === "top") {
+            return `No products yet`;
+        }
+
+        return "";
+    };
+
+    const getLatestOrders = () => {
+        if (!orders?.length) return [];
+
+        return orders.splice(0, ordersCount);
+    };
+
+    const getLatestProducts = () => {
+        if (!products?.length) return [];
+
+        return products.splice(0, ordersCount);
+    };
+
     return (
         <div
             className={`${styles.column} ${
@@ -27,6 +58,18 @@ const OrdersListComponent: React.FC<OrdersListProps> = ({
             }`}
         >
             <h2 className={styles.title}>{getColumnTitle()}</h2>
+
+            {orders?.length ? (
+                getLatestOrders().map((el, index) => (
+                    <OrderItem key={index} order={el} />
+                ))
+            ) : products?.length ? (
+                getLatestProducts().map((el, index) => (
+                    <ProductItem key={index} product={el} totalSum={totalSum} />
+                ))
+            ) : (
+                <p className={styles.empty}>{getEmptyDesc()}</p>
+            )}
         </div>
     );
 };

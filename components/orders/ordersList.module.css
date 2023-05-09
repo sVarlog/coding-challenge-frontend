@@ -3,14 +3,6 @@
     padding: 27px 23px;
 }
 
-.column.left {
-    width: 40%;
-}
-
-.column.right {
-    width: 60%;
-}
-
 .column .title {
     font-family: "Source Serif Pro";
     font-style: normal;
@@ -22,4 +14,40 @@
     width: 100%;
     border-bottom: 2px solid #c4c4c4;
     padding-bottom: 3px;
+    margin-bottom: 23px;
+}
+
+.column .empty {
+    font-family: "Montserrat";
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 24px;
+    color: #e8e8e8;
+    margin-bottom: 11px;
+    text-align: center;
+}
+
+@media only screen and (max-width: 600px) {
+    .column.left,
+    .column.right {
+        width: 100%;
+    }
+}
+
+@media only screen and (min-width: 600px) {
+    .column.left,
+    .column.right {
+        width: 100%;
+    }
+}
+
+@media only screen and (min-width: 992px) {
+    .column.left {
+        width: 40%;
+    }
+
+    .column.right {
+        width: 60%;
+    }
 }

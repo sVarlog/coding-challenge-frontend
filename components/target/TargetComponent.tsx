@@ -16,11 +16,7 @@ const TargetComponent: React.FC<TargetComponentProps> = ({
 }) => {
     const [widthPercent, setWidthPercent] = useState(0);
 
-    const resultWidthPercent = widthPercent * (target / maxTarget);
-
     const targetWrapRef = useRef<HTMLDivElement>(null);
-
-    console.log(widthPercent, resultWidthPercent);
 
     const getInnerStyles = () => {
         if (!widthPercent) return { width: 0 };
