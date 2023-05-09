@@ -6,7 +6,7 @@ import {
     getFormattedString,
     getMonthName,
     getNumberFromString,
-} from "utils/formatting";
+} from "../utils/formatting";
 import OrdersListComponent from "@/components/orders/OrdersListComponent";
 import { Order, Product, Target } from "../utils/interfaces";
 import HeaderComponent from "@/components/header/HeaderComponent";

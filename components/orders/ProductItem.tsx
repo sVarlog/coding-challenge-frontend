@@ -1,7 +1,7 @@
 import React from "react";
 import { Product } from "utils/interfaces";
 import styles from "./product.module.css";
-import { getFormattedString } from "utils/formatting";
+import { getFormattedString } from "../../utils/formatting";
 
 interface ProductProps {
     product: Product;
