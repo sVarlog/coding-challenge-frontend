@@ -6,7 +6,7 @@ import {
     getFormattedString,
     getMonthName,
     getNumberFromString,
-} from "utils/formatting";
+} from "../utils/formatting";
 import OrdersListComponent from "@/components/orders/OrdersListComponent";
 import { Order, Product, Target } from "../utils/interfaces";
 import HeaderComponent from "@/components/header/HeaderComponent";
@@ -94,6 +94,13 @@ const Home = () => {
                 const dateA = new Date(`${yearA}-${monthA}-${dayA}`);
                 const [dayB, monthB, yearB] = b["Order date"].split(".");
                 const dateB = new Date(`${yearB}-${monthB}-${dayB}`);
+
+                if (dateA.getTime() === dateB.getTime()) {
+                    return (
+                        Number(b["Order number"]) - Number(a["Order number"])
+                    );
+                }
+
                 return dateB.getTime() - dateA.getTime();
             });
 

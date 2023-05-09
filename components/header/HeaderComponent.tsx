@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./header.module.css";
-import { getMonthName } from "utils/formatting";
+import { getMonthName } from "../../utils/formatting";
 import CountdownComponent from "@/components/countdown/CountdownComponent";
 
 interface HeaderProps {
