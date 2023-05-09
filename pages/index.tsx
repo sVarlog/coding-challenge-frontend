@@ -94,6 +94,13 @@ const Home = () => {
                 const dateA = new Date(`${yearA}-${monthA}-${dayA}`);
                 const [dayB, monthB, yearB] = b["Order date"].split(".");
                 const dateB = new Date(`${yearB}-${monthB}-${dayB}`);
+
+                if (dateA.getTime() === dateB.getTime()) {
+                    return (
+                        Number(b["Order number"]) - Number(a["Order number"])
+                    );
+                }
+
                 return dateB.getTime() - dateA.getTime();
             });
 
