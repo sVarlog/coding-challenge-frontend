@@ -18,7 +18,7 @@ const ProductItem: React.FC<ProductProps> = ({ product, totalSum }) => {
     };
 
     const getVolumePercent = (vol: number) => {
-        return (vol / totalSum) * 100;
+        return ((vol / totalSum) * 100).toFixed(2);
     };
 
     return (
@@ -30,7 +30,7 @@ const ProductItem: React.FC<ProductProps> = ({ product, totalSum }) => {
                     className={styles.percent}
                     style={{ width: `${getVolumePercent(product.volume)}%` }}
                 >
-                    <span>10%</span>
+                    <span>{getVolumePercent(product.volume)}%</span>
                 </div>
             </div>
 
