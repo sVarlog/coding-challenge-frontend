@@ -65,53 +65,6 @@
     z-index: 2;
 }
 
-.wrapper .head {
-    display: flex;
-    width: 100%;
-    justify-content: space-between;
-    margin-bottom: 160px;
-}
-
-.wrapper .head p {
-    font-family: "Source Serif Pro";
-    font-style: normal;
-    font-weight: 400;
-    font-size: 20px;
-    line-height: 25px;
-    color: #c4c4c4;
-}
-
-.wrapper .head .switcher {
-    display: flex;
-    align-items: center;
-    margin-top: 7px;
-}
-
-.wrapper .head .switcher h2 {
-    font-family: "Montserrat";
-    font-style: normal;
-    font-weight: 700;
-    color: #ffffff;
-}
-
-.wrapper .head .switcher .switcherBtns {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.wrapper .head .switcher .switcherBtns button {
-    background: #26262c;
-    border: 1px solid #000000;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.wrapper .head .switcher .switcherBtns button:hover {
-    border: 1px solid #292929;
-    background: #35353d;
-}
-
 .wrapper h1 {
     font-family: "Roboto";
     font-style: normal;
@@ -141,76 +94,24 @@
         padding: 20px;
     }
 
-    .wrapper .head {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-    }
-
     .wrapper h1 {
         font-size: 30px;
         line-height: 50px;
     }
 
-    .wrapper .head .switcher .switcherBtns {
-        margin-left: 15px;
-    }
-
-    .wrapper .head .switcher h2 {
-        font-size: 22px;
-        line-height: 24px;
-        min-width: 160px;
-    }
-
     .wrapper .columns {
         flex-direction: column;
-    }
-
-    .wrapper .head .switcher .switcherBtns button {
-        padding: 5px;
     }
 }
 
 @media only screen and (min-width: 600px) {
-    .wrapper .head {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-    }
-
-    .wrapper .head .switcher .switcherBtns {
-        margin-left: 60px;
-    }
-
     .wrapper h1 {
         font-size: 80px;
         line-height: 100px;
     }
 
-    .wrapper .head .switcher h2 {
-        font-size: 30px;
-        line-height: 37px;
-        min-width: 220px;
-    }
-
     .wrapper .columns {
         flex-direction: column;
-    }
-
-    .wrapper .head .switcher .switcherBtns button {
-        padding: 10px;
-    }
-}
-
-@media only screen and (min-width: 768px) {
-    .wrapper .head {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-    }
-
-    .wrapper .head .switcher .switcherBtns {
-        margin-left: 130px;
     }
 }
 

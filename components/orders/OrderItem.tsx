@@ -1,9 +1,8 @@
 import React from "react";
-import { Order } from "utils/types";
 import styles from "./order.module.css";
 
 interface OrderProps {
-    order: Order;
+    order: string;
 }
 
 const OrderItem: React.FC<OrderProps> = ({ order }) => {
