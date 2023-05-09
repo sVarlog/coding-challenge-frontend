@@ -3,14 +3,6 @@
     padding: 27px 23px;
 }
 
-.column.left {
-    width: 40%;
-}
-
-.column.right {
-    width: 60%;
-}
-
 .column .title {
     font-family: "Source Serif Pro";
     font-style: normal;
@@ -34,4 +26,28 @@
     color: #e8e8e8;
     margin-bottom: 11px;
     text-align: center;
+}
+
+@media only screen and (max-width: 600px) {
+    .column.left,
+    .column.right {
+        width: 100%;
+    }
+}
+
+@media only screen and (min-width: 600px) {
+    .column.left,
+    .column.right {
+        width: 100%;
+    }
+}
+
+@media only screen and (min-width: 992px) {
+    .column.left {
+        width: 40%;
+    }
+
+    .column.right {
+        width: 60%;
+    }
 }

@@ -215,12 +215,14 @@ const Home = () => {
                         type={"recent"}
                         ordersCount={ordersCount}
                         orders={filteredOrders}
+                        totalSum={ordersSum}
                     />
 
                     <OrdersListComponent
                         type={"top"}
                         ordersCount={ordersCount}
                         products={popularProducts}
+                        totalSum={ordersSum}
                     />
                 </div>
             )}

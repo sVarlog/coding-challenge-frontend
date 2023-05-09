@@ -91,21 +91,16 @@
     font-family: "Montserrat";
     font-style: normal;
     font-weight: 700;
-    font-size: 30px;
-    line-height: 37px;
     color: #ffffff;
-    min-width: 220px;
 }
 
 .wrapper .head .switcher .switcherBtns {
     display: flex;
     align-items: center;
-    margin-left: 130px;
     gap: 10px;
 }
 
 .wrapper .head .switcher .switcherBtns button {
-    padding: 10px;
     background: #26262c;
     border: 1px solid #000000;
     border-radius: 5px;
@@ -121,8 +116,6 @@
     font-family: "Roboto";
     font-style: normal;
     font-weight: 700;
-    font-size: 192px;
-    line-height: 225px;
     color: #ffffff;
     margin-bottom: 100px;
 }
@@ -141,4 +134,100 @@
     gap: 17px;
     z-index: 3;
     margin-bottom: 35px;
+}
+
+@media only screen and (max-width: 600px) {
+    .wrapper .container {
+        padding: 20px;
+    }
+
+    .wrapper .head {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .wrapper h1 {
+        font-size: 30px;
+        line-height: 50px;
+    }
+
+    .wrapper .head .switcher .switcherBtns {
+        margin-left: 15px;
+    }
+
+    .wrapper .head .switcher h2 {
+        font-size: 22px;
+        line-height: 24px;
+        min-width: 160px;
+    }
+
+    .wrapper .columns {
+        flex-direction: column;
+    }
+
+    .wrapper .head .switcher .switcherBtns button {
+        padding: 5px;
+    }
+}
+
+@media only screen and (min-width: 600px) {
+    .wrapper .head {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .wrapper .head .switcher .switcherBtns {
+        margin-left: 60px;
+    }
+
+    .wrapper h1 {
+        font-size: 80px;
+        line-height: 100px;
+    }
+
+    .wrapper .head .switcher h2 {
+        font-size: 30px;
+        line-height: 37px;
+        min-width: 220px;
+    }
+
+    .wrapper .columns {
+        flex-direction: column;
+    }
+
+    .wrapper .head .switcher .switcherBtns button {
+        padding: 10px;
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    .wrapper .head {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .wrapper .head .switcher .switcherBtns {
+        margin-left: 130px;
+    }
+}
+
+@media only screen and (min-width: 992px) {
+    .wrapper h1 {
+        font-size: 150px;
+        line-height: 175px;
+    }
+
+    .wrapper .columns {
+        flex-direction: row;
+    }
+}
+
+@media only screen and (min-width: 1200px) {
+    .wrapper h1 {
+        font-size: 192px;
+        line-height: 225px;
+    }
 }

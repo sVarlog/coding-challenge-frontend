@@ -8,6 +8,7 @@ import ProductItem from "./ProductItem";
 interface OrdersListProps {
     type: "recent" | "top";
     ordersCount: number;
+    totalSum: number;
     orders?: Order[];
     products?: Product[];
 }
@@ -17,6 +18,7 @@ const OrdersListComponent: React.FC<OrdersListProps> = ({
     ordersCount,
     orders,
     products,
+    totalSum,
 }) => {
     const getColumnTitle = () => {
         if (type === "recent") {
@@ -66,7 +68,7 @@ const OrdersListComponent: React.FC<OrdersListProps> = ({
                 ))
             ) : products?.length ? (
                 getLatestProducts().map((el, index) => (
-                    <ProductItem key={index} product={el} />
+                    <ProductItem key={index} product={el} totalSum={totalSum} />
                 ))
             ) : (
                 <p className={styles.empty}>{getEmptyDesc()}</p>
