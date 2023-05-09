@@ -97,11 +97,6 @@ const Home: React.FC = () => {
         }
 
         const orders: string[] = data
-            .sort(
-                (a: string, b: string) =>
-                    new Date(b[dateIndex]).getTime() -
-                    new Date(a[dateIndex]).getTime()
-            )
             .filter((order: string) => {
                 const orderDate = new Date(
                     order[dateIndex].split(".").reverse().join("/")
@@ -115,6 +110,21 @@ const Home: React.FC = () => {
                     .reverse()
                     .join("/");
                 return orderDateFilter === dateFilter;
+            })
+            .sort((a: string, b: string) => {
+                const dateA = new Date(a[dateIndex]);
+                const dateB = new Date(b[dateIndex]);
+
+                const dayA =
+                    dateA.getFullYear() * 10000 +
+                    (dateA.getMonth() + 1) * 100 +
+                    dateA.getDate();
+                const dayB =
+                    dateB.getFullYear() * 10000 +
+                    (dateB.getMonth() + 1) * 100 +
+                    dateB.getDate();
+
+                return dayB - dayA;
             });
 
         setFilteredOrders(orders);
