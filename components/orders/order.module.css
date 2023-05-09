@@ -29,6 +29,7 @@
     width: 25%;
     text-align: right;
     font-weight: 700;
+    white-space: nowrap;
 }
 
 @media only screen and (max-width: 600px) {

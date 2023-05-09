@@ -23,9 +23,9 @@ const CountdownComponent: React.FC<CountdownProps> = ({ getData }) => {
     }, []);
 
     return (
-        <p className={styles.countdown}>
+        <span className={styles.countdown}>
             Refresh in <span>{countdown}</span>
-        </p>
+        </span>
     );
 };
 
