@@ -20,7 +20,6 @@ const TargetComponent: React.FC<TargetComponentProps> = ({
 
     const getInnerStyles = () => {
         if (!widthPercent) return { width: 0 };
-        maxTarget;
 
         return { width: `${(target / maxTarget) * 100}%` };
     };
@@ -48,7 +47,7 @@ const TargetComponent: React.FC<TargetComponentProps> = ({
                 ></div>
 
                 <div className={styles.marker}>
-                    <span>{getFormattedString(target)}</span>
+                    <span>{getFormattedString(target, true)}</span>
                 </div>
             </div>
         </div>

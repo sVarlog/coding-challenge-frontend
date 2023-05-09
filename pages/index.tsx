@@ -8,7 +8,7 @@ import {
     getNumberFromString,
 } from "utils/formatting";
 import OrdersListComponent from "@/components/orders/OrdersListComponent";
-import { Product } from "utils/interfaces";
+import { Order, Product, Target } from "utils/interfaces";
 import HeaderComponent from "@/components/header/HeaderComponent";
 import { getOrders, getTargets } from "api/sheets";
 
@@ -18,19 +18,19 @@ const Home: React.FC = () => {
     const [currentDate, setCurrentDate] = useState(new Date());
     const [isLoading, setLoading] = useState(true);
     const [ordersSum, setOrdersSum] = useState(0);
-    const [filteredOrders, setFilteredOrders] = useState<string[]>([]);
+    const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);
     const [popularProducts, setPopularProducts] = useState<Product[]>([]);
-    const [values, setValues] = useState<string[]>([]);
-    const [targets, setTargets] = useState<string[]>([]);
+    const [values, setValues] = useState<Order[]>([]);
+    const [targets, setTargets] = useState<Target[]>([]);
 
     const monthTarget = getNumberFromString(
-        targets.find((el) => el.includes(getMonthName(currentDate)))?.[1]
+        targets.find((el) => el["Month"] === getMonthName(currentDate))?.Target
     );
 
     const maxTarget = Math.max(
         ...JSON.parse(JSON.stringify(targets))
             .splice(1)
-            .map((el: string[]) => getNumberFromString(el[1]))
+            .map((el: Target) => getNumberFromString(el["Target"]))
     );
 
     const changeCurrentMonth = (dir: "next" | "prev") => {
@@ -56,24 +56,20 @@ const Home: React.FC = () => {
     }, []);
 
     const getDataHandler = async () => {
-        const fetchOrders = getOrders()
-            .then((res) => res.json())
-            .then((data) => {
-                setValues(data.values);
-            });
-        const fetchTargets = getTargets()
-            .then((res) => res.json())
-            .then((data) => {
-                setTargets(data.values);
-            });
+        getOrders().then((result) => {
+            setValues(result);
+        });
+        const fetchTargets = getTargets().then((result) => {
+            setTargets(result);
+        });
 
-        Promise.all([fetchOrders, fetchTargets]).then(() => {
+        Promise.all([getOrders(), fetchTargets]).then(() => {
             setLoading(false);
         });
     };
 
     useEffect(() => {
-        if (!targets.length || !values.length) return;
+        if (!values.length) return;
 
         const dateFilter = currentDate
             .toLocaleString("default", {
@@ -84,27 +80,10 @@ const Home: React.FC = () => {
             .reverse()
             .join("/");
 
-        const [header, ...data] = values;
-        const dateIndex = header.indexOf("Order date");
-        const volumeIndex = header.indexOf("Order volume");
-        const productIndex = header.indexOf("Product");
-
-        if (dateIndex === -1 || volumeIndex === -1 || productIndex === -1) {
-            console.error(
-                "Could not find 'Order date', 'Order volume', or 'Product' in header row"
-            );
-            return;
-        }
-
-        const orders: string[] = data
-            .sort(
-                (a: string, b: string) =>
-                    new Date(b[dateIndex]).getTime() -
-                    new Date(a[dateIndex]).getTime()
-            )
-            .filter((order: string) => {
+        const orders = values
+            .filter((order: Order) => {
                 const orderDate = new Date(
-                    order[dateIndex].split(".").reverse().join("/")
+                    order["Order date"].split(".").reverse().join("/")
                 );
                 const orderDateFilter = orderDate
                     .toLocaleString("default", {
@@ -115,26 +94,42 @@ const Home: React.FC = () => {
                     .reverse()
                     .join("/");
                 return orderDateFilter === dateFilter;
+            })
+            .sort((a: Order, b: Order) => {
+                const dateA = new Date(a["Order date"]);
+                const dateB = new Date(b["Order date"]);
+
+                const dayA =
+                    dateA.getFullYear() * 10000 +
+                    (dateA.getMonth() + 1) * 100 +
+                    dateA.getDate();
+
+                const dayB =
+                    dateB.getFullYear() * 10000 +
+                    (dateB.getMonth() + 1) * 100 +
+                    dateB.getDate();
+
+                return dayB - dayA;
             });
 
         setFilteredOrders(orders);
 
         const orderVolume = orders
-            .map((row) => row[volumeIndex])
+            .map((row) => row["Order volume"])
             .reduce((acc, curr) => acc + getNumberFromString(curr), 0);
 
         setOrdersSum(orderVolume || 0);
 
         const uniqueProducts = Array.from(
-            new Set(orders.map((row) => row[productIndex]))
+            new Set(orders.map((row) => row["Product"]))
         );
 
         const popularProducts = uniqueProducts.map((product) => {
             const productOrders = orders.filter(
-                (row) => row[productIndex] === product
+                (row) => row["Product"] === product
             );
             const volume = productOrders
-                .map((row) => row[volumeIndex])
+                .map((row) => row["Order volume"])
                 .reduce((acc, curr) => acc + getNumberFromString(curr), 0);
             return {
                 name: product,
@@ -143,7 +138,7 @@ const Home: React.FC = () => {
         });
 
         setPopularProducts(popularProducts.sort((a, b) => b.volume - a.volume));
-    }, [currentDate, targets, values]);
+    }, [currentDate, values]);
 
     return (
         <div className={styles.wrapper}>

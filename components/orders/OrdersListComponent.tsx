@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./ordersList.module.css";
-import { Product } from "utils/interfaces";
+import { Order, Product } from "utils/interfaces";
 import OrderItem from "./OrderItem";
 import ProductItem from "./ProductItem";
 
@@ -8,7 +8,7 @@ interface OrdersListProps {
     type: "recent" | "top";
     ordersCount: number;
     totalSum: number;
-    orders?: string[];
+    orders?: Order[];
     products?: Product[];
 }
 
