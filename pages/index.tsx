@@ -7,6 +7,7 @@ import { getFormattedString, getNumberFromString } from "utils/formatting";
 import OrdersListComponent from "@/components/orders/OrdersListComponent";
 import { Order } from "utils/types";
 import { Product } from "utils/interfaces";
+import CountdownComponent from "@/components/countdown/CountdownComponent";
 
 const ordersCount = 5;
 
@@ -49,6 +50,10 @@ const Home = () => {
 
             setCurrentDate(newDate);
         }
+    };
+
+    const getDataHandler = () => {
+        console.log("getData");
     };
 
     useEffect(() => {
@@ -120,6 +125,7 @@ const Home = () => {
         });
 
         setPopularProducts(popularProducts.sort((a, b) => b.volume - a.volume));
+        console.log("updated");
     }, [currentDate]);
 
     setTimeout(() => {
@@ -182,9 +188,7 @@ const Home = () => {
                     </div>
 
                     <div className="right">
-                        <p className={styles.countdown}>
-                            Refresh in <span>10</span>
-                        </p>
+                        <CountdownComponent getData={getDataHandler} />
                     </div>
                 </div>
 

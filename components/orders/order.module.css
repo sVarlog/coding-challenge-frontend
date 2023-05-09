@@ -6,24 +6,27 @@
     justify-content: space-between;
     gap: 18px;
     font-family: "Montserrat";
-    font-weight: 500;
     font-style: normal;
+    font-weight: 500;
     font-size: 20px;
     line-height: 24px;
     color: #e8e8e8;
 }
 
-.wrap p.name {
-    width: 30%;
-    text-align: start;
+.wrap .orderNumber {
+    width: 10%;
 }
 
-.wrap p.volume {
-    font-weight: 700;
+.wrap .orderDate {
     width: 20%;
-    text-align: end;
 }
 
-.wrap .value {
-    width: 50%;
+.wrap .orderName {
+    width: 55%;
+}
+
+.wrap .orderPrice {
+    width: 25%;
+    text-align: right;
+    font-weight: 700;
 }

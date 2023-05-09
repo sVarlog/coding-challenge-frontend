@@ -28,6 +28,30 @@ const OrdersListComponent: React.FC<OrdersListProps> = ({
         return "";
     };
 
+    const getEmptyDesc = () => {
+        if (type === "recent") {
+            return `No orders yet`;
+        } else if (type === "top") {
+            return `No products yet`;
+        }
+
+        return "";
+    };
+
+    const getLatestOrders = () => {
+        console.log(orders, "order");
+        if (!orders?.length) return [];
+
+        return orders.splice(0, ordersCount);
+    };
+
+    const getLatestProducts = () => {
+        console.log(products, "order");
+        if (!products?.length) return [];
+
+        return products.splice(0, ordersCount);
+    };
+
     return (
         <div
             className={`${styles.column} ${
@@ -37,13 +61,15 @@ const OrdersListComponent: React.FC<OrdersListProps> = ({
             <h2 className={styles.title}>{getColumnTitle()}</h2>
 
             {orders?.length ? (
-                orders.map((el, index) => <OrderItem key={index} order={el} />)
+                getLatestOrders().map((el, index) => (
+                    <OrderItem key={index} order={el} />
+                ))
             ) : products?.length ? (
-                products.map((el, index) => (
+                getLatestProducts().map((el, index) => (
                     <ProductItem key={index} product={el} />
                 ))
             ) : (
-                <>No products</>
+                <p className={styles.empty}>{getEmptyDesc()}</p>
             )}
         </div>
     );
