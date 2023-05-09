@@ -82,34 +82,20 @@ const Home: React.FC = () => {
 
         const orders = values
             .filter((order: Order) => {
-                const orderDate = new Date(
-                    order["Order date"].split(".").reverse().join("/")
-                );
-                const orderDateFilter = orderDate
-                    .toLocaleString("default", {
-                        month: "2-digit",
-                        year: "numeric",
-                    })
-                    .split(".")
-                    .reverse()
-                    .join("/");
+                const [day, month, year] = order["Order date"].split(".");
+                const orderDate = new Date(`${year}-${month}-${day}`);
+                const orderDateFilter = orderDate.toLocaleString("default", {
+                    month: "2-digit",
+                    year: "numeric",
+                });
                 return orderDateFilter === dateFilter;
             })
             .sort((a: Order, b: Order) => {
-                const dateA = new Date(a["Order date"]);
-                const dateB = new Date(b["Order date"]);
-
-                const dayA =
-                    dateA.getFullYear() * 10000 +
-                    (dateA.getMonth() + 1) * 100 +
-                    dateA.getDate();
-
-                const dayB =
-                    dateB.getFullYear() * 10000 +
-                    (dateB.getMonth() + 1) * 100 +
-                    dateB.getDate();
-
-                return dayB - dayA;
+                const [dayA, monthA, yearA] = a["Order date"].split(".");
+                const dateA = new Date(`${yearA}-${monthA}-${dayA}`);
+                const [dayB, monthB, yearB] = b["Order date"].split(".");
+                const dateB = new Date(`${yearB}-${monthB}-${dayB}`);
+                return dateB.getTime() - dateA.getTime();
             });
 
         setFilteredOrders(orders);
