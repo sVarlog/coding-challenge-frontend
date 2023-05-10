@@ -1,9 +1,10 @@
 import { Order, Target } from "utils/interfaces";
 import { getOrders, getTargets } from "../api/sheets";
-import { createMachine } from "xstate";
+import { createMachine } from "xstate/lib/machine";
 
 const homeMachine = createMachine(
     {
+        predictableActionArguments: true,
         id: "home",
         initial: "idle",
         context: {
