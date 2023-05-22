@@ -10,17 +10,19 @@ import {
 import OrdersListComponent from "@/components/orders/OrdersListComponent";
 import { Order, Product, Target } from "../utils/interfaces";
 import HeaderComponent from "@/components/header/HeaderComponent";
-import { getOrders, getTargets } from "../api/sheets";
+import toggleMachine from "../xstate/index";
+import { useMachine } from "@xstate/react";
 
 const Home = () => {
     const [currentDate, setCurrentDate] = useState(new Date());
-    const [isLoading, setLoading] = useState(true);
     const [ordersSum, setOrdersSum] = useState(0);
     const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);
     const [popularProducts, setPopularProducts] = useState<Product[]>([]);
-    const [values, setValues] = useState<Order[]>([]);
-    const [targets, setTargets] = useState<Target[]>([]);
     const ordersCount = 5;
+
+    const [state, send] = useMachine(toggleMachine);
+    const { values, targets }: { values: Order[]; targets: Target[] } =
+        state.context;
 
     const monthTarget = getNumberFromString(
         targets.find((el) => el["Month"] === getMonthName(currentDate))?.Target
@@ -55,16 +57,7 @@ const Home = () => {
     }, []);
 
     const getDataHandler = async () => {
-        getOrders().then((result) => {
-            setValues(result);
-        });
-        const fetchTargets = getTargets().then((result) => {
-            setTargets(result);
-        });
-
-        Promise.all([getOrders(), fetchTargets]).then(() => {
-            setLoading(false);
-        });
+        send("loading", { type: "FETCH", name: "test" });
     };
 
     useEffect(() => {
@@ -147,10 +140,12 @@ const Home = () => {
                     getDataHandler={getDataHandler}
                 />
 
-                {isLoading ? (
+                {state.matches("loading") || state.matches("idle") ? (
                     <div className={styles.loadingWrap}>
                         <img src="/WhiteLoader.svg" />
                     </div>
+                ) : state.matches("failure") ? (
+                    <div>Error fetching orders: {state.context.error}</div>
                 ) : (
                     <>
                         <h1>{getFormattedString(ordersSum)}</h1>
@@ -164,7 +159,7 @@ const Home = () => {
                 )}
             </div>
 
-            {!isLoading && (
+            {state.matches("success") && (
                 <div className={styles.columns}>
                     <OrdersListComponent
                         type={"recent"}
